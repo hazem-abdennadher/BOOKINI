@@ -1,6 +1,9 @@
 package DataBase;
 
+import java.io.FileInputStream;
 import java.sql.*;
+
+import javax.swing.ImageIcon;
 
 public class Users {
 
@@ -22,7 +25,15 @@ public class Users {
 		}
 		return false;
 	}
-	//-------------------------------------getting user info----------------------------------------------------------
+	public static boolean emailExist(ResultSet rs,String Email ) throws SQLException {
+		while(rs.next()) {
+			if(rs.getString("Email").equalsIgnoreCase(Email)) {
+				return true ;
+			}
+		}
+		return false;
+	}
+	//-----------------------------------------------------getting user info---------------------------------------------------------------
 	public static String getUserEmail(ResultSet rs,String userName ) throws SQLException {
 		while(rs.next()) {
 			if(rs.getString("userName").equalsIgnoreCase(userName)) {
@@ -86,14 +97,31 @@ public class Users {
 		}
 		return "doesn't exist";
 	}
+	public static String getUserbio(ResultSet rs,String userName ) throws SQLException {
+		while(rs.next()) {
+			if(rs.getString("userName").equalsIgnoreCase(userName)) {
+				StringBuffer buffer = new StringBuffer();
+				buffer.append(rs.getString("UserBio"));
+				return buffer.toString();
+			}
+		}
+		return "doesn't exist";
+	}
+	public static ImageIcon getUserImg(ResultSet rs) throws SQLException {
+		if(rs.next()) {
+			return  new ImageIcon(rs.getBytes("UserImage"));
+		}
+		return null;
+	}
+		
+//--------------------------------------------------------------------------------------------------------------------------------------
 	
 	
 	
 	
-	
-	public static boolean addUser(Connection con, String Email , String userName, String Name ,String LastName,int Age ,String Gender, String Password) {
+	public static boolean addUser(Connection con, String Email , String userName, String Name ,String LastName,int Age ,String Gender, String Password,FileInputStream input) {
 			
-		String sql = "INSERT INTO `projectjava`.`users` (`Email`, `userName`, `Name`, `LastName`, `Age`, `Gender`, `Password`) VALUES (?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO `projectjava`.`users` (`Email`, `userName`, `Name`, `LastName`, `Age`, `Gender`, `Password` , `UserImage` ) VALUES (?,?,?,?,?,?,?,?)";
 
 		try {	
 				PreparedStatement stmt = con.prepareStatement(sql);
@@ -104,6 +132,7 @@ public class Users {
 				stmt.setInt(5, Age);
 				stmt.setString(6, Gender);
 				stmt.setString(7, Password);
+				stmt.setBinaryStream(8, input);
 				stmt.execute();
 				return true;
 				
@@ -130,6 +159,46 @@ public class Users {
 		}
 		
 	}	
+	
+public static boolean EditUser(Connection con, String userName , String name ,String lastName , int age, String Bio ,FileInputStream input) {
 		
+		String sql = "UPDATE `projectjava`.`users` SET  `Name` = ?, `LastName` =  ? , `Age` = ?, `UserImage` = ?, `UserBio` = ? WHERE (`userName` = ?)";
+
+		try {	
+				PreparedStatement stmt = con.prepareStatement(sql);
+				stmt.setString(1, name);
+				stmt.setString(2, lastName);
+				stmt.setInt(3, age);
+				stmt.setBinaryStream(4, input);
+				stmt.setString(5, Bio);
+				stmt.setString(6, userName);
+				stmt.execute();
+				return true;
+				
+			}catch(Exception e){
+				System.out.println(e);
+				return false;
+			}
+	}
+	 
+public static boolean EditUserNoImg(Connection con, String userName , String name ,String lastName , int age, String Bio ) {
+	
+	String sql = "UPDATE `projectjava`.`users` SET  `Name` = ?, `LastName` =  ? , `Age` = ?, `UserBio` = ? WHERE (`userName` = ?)";
+
+	try {	
+			PreparedStatement stmt = con.prepareStatement(sql);
+			stmt.setString(1, name);
+			stmt.setString(2, lastName);
+			stmt.setInt(3, age);
+			stmt.setString(4, Bio);
+			stmt.setString(5, userName);
+			stmt.execute();
+			return true;
+			
+		}catch(Exception e){
+			System.out.println(e);
+			return false;
+		}
+}
 
 }

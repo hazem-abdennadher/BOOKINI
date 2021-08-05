@@ -10,5 +10,5 @@ public class DBConnection {
 		return (Connection)DriverManager.getConnection(CONN,USERNAME,PASSWORD);
 	}
 	
-
+ 
 }

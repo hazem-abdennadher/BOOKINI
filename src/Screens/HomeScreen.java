@@ -6,21 +6,29 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.border.EmptyBorder;
+
 import javax.swing.border.EtchedBorder;
+
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.SwingConstants;
+import javax.swing.border.MatteBorder;
+
 
 public class HomeScreen extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
 	/**
@@ -35,7 +43,7 @@ public class HomeScreen extends JFrame {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}
+			} 
 		});
 	}
 
@@ -45,68 +53,42 @@ public class HomeScreen extends JFrame {
 	public HomeScreen() {
 		setResizable(false);
 		setTitle("BOOKINI");
-		setBounds(new Rectangle(0, 0, 722, 482));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 724, 500);
+		setBounds(100, 100, 1210, 732);
 		contentPane = new JPanel();
-		contentPane.setBounds(new Rectangle(0, 0, 722, 482));
+		contentPane.setBounds(new Rectangle(0, 0, 1366, 768));
 		contentPane.setBorder(null);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLayeredPane HomeScreen = new JLayeredPane();
-		HomeScreen.setBounds(0, 0, 722, 482);
+		HomeScreen.setBounds(0, 0, 1366, 768);
 		HomeScreen.setLayout(null);
 		contentPane.add(HomeScreen);
-
-		//---------------------------adding background ---------------------------------
-		JLabel Background = new JLabel();
-		Background.setIcon(new ImageIcon(HomeScreen.class.getResource("/Images/Background.png")));
-		Background.setBounds(new Rectangle(0, 0, 722, 472));
-		HomeScreen.add(Background);
-		HomeScreen.setLayer(Background, 0);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(0,0,0,90));
+		panel.setBounds(561, -43, 645, 811);
+		HomeScreen.add(panel);
+		panel.setLayout(null);
 		//------------------------------------------------------------------------------
 		
 		//-------------------------title------------------------------------------------
 		JLabel Title = new JLabel("BOOKINI");
+		Title.setBounds(112, 360, 421, 90);
+		panel.add(Title);
 		HomeScreen.setLayer(Title, 1);
-		Title.setBorder(null);
+		Title.setBorder(new MatteBorder(3, 3, 3, 3, (Color) Color.WHITE));
 		Title.setForeground(new Color(255, 255, 255)); 
-		Title.setFont(new Font("MV Boli", Title.getFont().getStyle() | Font.BOLD, Title.getFont().getSize() + 44));
+		Title.setFont(new Font("MV Boli", Title.getFont().getStyle() | Font.BOLD, Title.getFont().getSize() + 70));
 		Title.setHorizontalAlignment(SwingConstants.CENTER);
-		Title.setBounds(210, 240, 281, 66);	
-		HomeScreen.add(Title);
-		JSeparator separator = new JSeparator();
-		HomeScreen.setLayer(separator, 1);
-		separator.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
-		separator.setForeground(new Color(255, 255, 255));
-		separator.setBounds(221, 240, 270, 66);
-		HomeScreen.add(separator);
-		
-		//------------------------------------------------------------------------------
-		
-		//--------------------------button bech tod5il li sign in screen ---------------
-		JButton Access = new JButton("ACCESS LIBRARY");
-		HomeScreen.setLayer(Access, 1);
-	   Access.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-				SignInScreen signInScreen  = new SignInScreen();
-				signInScreen.setVisible(true);
-				
-			}
-		});
-		
-		Access.setForeground(new Color(255, 255, 255));
-		Access.setFont(new Font("Verdana", Font.PLAIN, 12));
-		Access.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		Access.setBackground(new Color(61, 132, 184));
-		Access.setBounds(221, 358, 117, 29);
-		HomeScreen.add(Access);
 		//------------------------------------------------------------------------------
 		//--------------------------------Button bech ysakir app------------------------
 		JButton Exit = new JButton("EXIT");
+		Exit.setBounds(346, 493, 160, 40);
+		panel.add(Exit);
 		HomeScreen.setLayer(Exit, 1);
+		
 		Exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
@@ -116,9 +98,45 @@ public class HomeScreen extends JFrame {
 		Exit.setForeground(new Color(255, 255, 255));
 		Exit.setBackground(new Color(232, 69, 69));
 		Exit.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		Exit.setFont(new Font("Verdana", Font.PLAIN, 12));
-		Exit.setBounds(374, 358, 117, 29);
-		HomeScreen.add(Exit);
+		Exit.setFont(new Font("Verdana", Font.PLAIN, 16));
+		
+		
+		//------------------------------------------------------------------------------
+		
+		//--------------------------button bech tod5il li sign in screen ---------------
+		JButton Access = new JButton("ACCESS LIBRARY");
+		Access.setBounds(149, 493, 160, 40);
+		panel.add(Access);
+		Access.setForeground(new Color(255, 255, 255));
+		Access.setFont(new Font("Verdana", Font.PLAIN, 16));
+		Access.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		Access.setBackground(new Color(61, 132, 184));
+		HomeScreen.setLayer(Access, 1);
+		Access.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				try {
+					SignInScreen signInScreen = new SignInScreen();
+					signInScreen.setVisible(true);
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		
+		
+
+		//---------------------------adding background ---------------------------------
+		JLabel Background = new JLabel();
+		Background.setBounds(new Rectangle(0, 0, 1206, 703));
+		HomeScreen.add(Background);
+		HomeScreen.setLayer(Background, 0);
+		ImageIcon image = new ImageIcon(HomeScreen.class.getResource("/Images/BackgroundPro.png"));
+	    Image im = image.getImage(); 
+	    Image myImg = im.getScaledInstance(Background.getWidth(), Background.getHeight(),Image.SCALE_SMOOTH);
+	    ImageIcon newImage = new ImageIcon(myImg);
+	    Background.setIcon(newImage);
 		//------------------------------------------------------------------------------
 	}
 }

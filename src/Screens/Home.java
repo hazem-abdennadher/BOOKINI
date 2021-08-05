@@ -1,18 +1,16 @@
 package Screens;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-
 public class Home {
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
-			public void run() {
+			public void run() { 
 				try {
+					@SuppressWarnings("unused")
 					Home window = new Home();
-				} catch (Exception e) {
+				} catch (Exception e) { 
 					e.printStackTrace();
 				}
 			}
